@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.prototype.SeatReservationActivity"
+    tools:showIn="@layout/tool_bar">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Find a seat"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select Date"
+            android:textAlignment="center"
+            android:id="@+id/date_choice"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            app:errorEnabled="true"
+            android:layout_marginBottom="15dp"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+
+            android:id="@+id/start_time"
+            android:spinnerMode="dialog"
+            android:layout_marginBottom="15dp"/>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Floor Level"
+            android:layout_marginBottom="15dp"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:id="@+id/floor_level"
+            android:spinnerMode="dropdown"
+            android:layout_marginBottom="15dp"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seat types"
+            android:textAlignment="center"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="No Preference"
+                android:layout_gravity="left"
+                android:id="@+id/checkbox_NoPreference"
+                android:onClick="checkbox_validating"
+                android:checked="true"/>
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="PC access"
+                android:layout_gravity="right"
+                android:id="@+id/checkbox_PCAccess"
+                android:onClick="checkbox_validate"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Power Socket"
+                android:layout_gravity="left"
+                android:id="@+id/checkbox_PowerSocket"
+                android:onClick="checkbox_validate"/>
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Near Window"
+                android:layout_gravity="right"
+                android:id="@+id/checkbox_NearWindow"
+                android:onClick="checkbox_validate"/>
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/light_blue"
+            android:onClick="detailSeat"
+            android:text="OK"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

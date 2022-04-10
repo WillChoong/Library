@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "299303018796",
+    "firebase_url": "https://utar-library-default-rtdb.firebaseio.com",
+    "project_id": "utar-library",
+    "storage_bucket": "utar-library.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299303018796:android:d7759a5bd9efca670b0c89",
+        "android_client_info": {
+          "package_name": "com.example.prototype"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299303018796-s3jhddujm7437j4mspnb3ve7pkui2497.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE2SZHVDGkMbhYsBz-2WrUv8qBurdnZ1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299303018796-s3jhddujm7437j4mspnb3ve7pkui2497.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299303018796:android:ba6dbbf8c7fe9fb20b0c89",
+        "android_client_info": {
+          "package_name": "my.edu.utar.testing_utarlibrary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299303018796-s3jhddujm7437j4mspnb3ve7pkui2497.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE2SZHVDGkMbhYsBz-2WrUv8qBurdnZ1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299303018796-s3jhddujm7437j4mspnb3ve7pkui2497.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
