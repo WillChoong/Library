@@ -10,4 +10,8 @@
     <color name="light_blue">#2087EE</color>
     <color name="grey">#F5F5F5</color>
     <color name="dark_blue">#2C10EF</color>
+    <color name="yellow">#ffc901</color>
+    <color name="pureBlack">#212100</color>
+    <color name="available">#458b00</color>
+    <color name="select">#fd5800</color>
 </resources>

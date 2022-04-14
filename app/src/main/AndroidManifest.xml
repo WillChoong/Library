@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Prototype">
         <activity
+            android:name=".Floor2_layout"
+            android:exported="false" />
+        <activity
             android:name=".SeatReservationActivity"
             android:exported="false" />
         <activity
@@ -21,13 +24,6 @@
         <activity
             android:name=".HomePage"
             android:exported="false" />
-        <activity
-            android:name=".StudentRole"
-            android:exported="false" />
-        <!--
-android:label="@string/title_activity_pick_role"
-            android:theme="@style/Theme.Prototype.NoActionBar" />
-        -->
         <activity
             android:name=".MainActivity"
             android:exported="true">

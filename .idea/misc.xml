@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Prototype/app/src/main/res/drawable-ldpi/floor2_asset.xml" value="1.0" />
         <entry key="..\:/Prototype/app/src/main/res/drawable-xxxhdpi/gradient_bs.xml" value="0.1455" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/gradient_bs.xml" value="0.1455" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/gradient_sc.xml" value="0.1455" />
@@ -15,6 +16,7 @@
         <entry key="..\:/Prototype/app/src/main/res/drawable/ic_untitled_1.xml" value="0.1455" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/ic_welcome.xml" value="0.2203125" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/welcome.xml" value="0.2203125" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/activity_floor2_layout.xml" value="0.1847672778561354" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_home_page.xml" value="0.17617753623188406" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_homepage_content.xml" value="0.22" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_login.xml" value="0.22" />

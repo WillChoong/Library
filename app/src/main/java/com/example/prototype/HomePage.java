@@ -37,6 +37,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     private TextView username, student_id;
     private String userId;
     private CardView sr, bs,cs;
+    private DocumentReference documentReferenced;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -71,7 +72,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         userId = fAuth.getCurrentUser().getUid();
 
         // Retrieve data from Firebase and change the textview in navigation view
-        DocumentReference documentReferenced=fStore.collection("users").document(userId);
+        documentReferenced=fStore.collection("users").document(userId);
         documentReferenced.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -106,7 +107,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         sr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(HomePage.this,SeatReservationActivity.class));
             }
         });
 
@@ -158,8 +159,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.nav_home:
                 break;
             case R.id.nav_seat:
-                /*Intent i = new Intent(MainActivity.this, SeatReservation.class);
-                startActivity(i);*/
+                Intent i = new Intent(HomePage.this, SeatReservationActivity.class);
+                startActivity(i);
                 break;
             case R.id.nav_book:
                 /*Intent g = new Intent(MainActivity.this, BookAvailability.class);
