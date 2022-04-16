@@ -1,8 +1,8 @@
 package com.example.prototype;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -10,7 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,18 +19,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +52,9 @@ public class ViewReservation extends AppCompatActivity implements NavigationView
     private DocumentReference documentReferenced;
     private String userId;
     private ImageView qr;
-    private List<Reservation> mList;
+    private ArrayList<Reservation> mList;
+    private RecyclerViewAdapter adapter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +89,7 @@ public class ViewReservation extends AppCompatActivity implements NavigationView
 
         // Declare firebaseAuth and firebaseFireStore
         fAuth=FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
+        fStore  = FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
 
         // Retrieve data from Firebase and change the textview in navigation view
@@ -114,40 +119,47 @@ public class ViewReservation extends AppCompatActivity implements NavigationView
             }
         });
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Fetching data");
+
         recyclerView = findViewById(R.id.recycleView);
-        mList = new ArrayList<>();
-
-        //Get all the reserved information related to the user
-        Task<QuerySnapshot> documentReference = fStore.collection("reservation").whereEqualTo("UserID",userId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful())
-                {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        mList.add(new Reservation((Boolean) document.get("Check In")
-                                ,(Boolean) document.get("Check Out")
-                                ,(String) document.get("UserID")
-                                ,(String) document.get("Date")
-                                ,(String) document.get("Time")
-                                ,(String) document.get("Floor")
-                                ,(String) document.get("SeatID")));
-                    }
-                }else{
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "Error getting documents: ", e);
-            }
-        });
-
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(mList,this);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        mList = new ArrayList<Reservation>();
+        adapter = new RecyclerViewAdapter(mList,ViewReservation.this);
+        recyclerView.setAdapter(adapter);
+        EventChangeListener();
 
         //end of onCreate
+    }
+
+
+    private void EventChangeListener()
+    {
+        fStore.collection("reservation").whereEqualTo("UserID",userId).orderBy("Date" ,Query.Direction.ASCENDING).orderBy("Time" ,Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(error!=null)
+                {
+                    if(progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    Log.e("Firebase error!",error.getMessage());
+                    return;
+                }
+                for(DocumentChange dc:value.getDocumentChanges())
+                {
+                    if(dc.getType() == DocumentChange.Type.ADDED)
+                    {
+                        mList.add(dc.getDocument().toObject(Reservation.class));
+                        Log.d(TAG,"Document"+dc.getDocument().get("SeatID"));
+                    }
+                    adapter.notifyDataSetChanged();
+                    if(progressDialog.isShowing())
+                        progressDialog.dismiss();
+                }
+            }
+        });
     }
 
     // avoid end application when the drawer is open

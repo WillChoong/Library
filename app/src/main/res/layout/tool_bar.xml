@@ -66,12 +66,12 @@
         layout="@layout/activity_scan_content"/>
 
     <include
+        android:id="@+id/view_reservation"
+        layout="@layout/activity_view_reservation_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:id="@+id/view_reservation"
-        android:visibility="gone"
-        layout="@layout/activity_view_reservation_content"/>
+        android:layout_marginTop="?actionBarSize"
+        android:visibility="visible" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

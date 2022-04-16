@@ -10,20 +10,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Holder> {
 
-    private List<Reservation> list;
-    private Context context;
+    ArrayList<Reservation> list;
+    Context context;
 
-    public RecyclerViewAdapter(List<Reservation> list, Context context) {
+    public RecyclerViewAdapter(ArrayList<Reservation> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
-    public class Holder extends RecyclerView.ViewHolder{
-        private TextView date,time,floor,seat;
+    public static class Holder extends RecyclerView.ViewHolder{
+        TextView date,time,floor,seat;
         public Holder(@NonNull View itemView)
         {
             super(itemView);
@@ -43,10 +43,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.Holder holder, int position) {
-        holder.date.setText(list.get(position).getDate());
-        holder.time.setText(list.get(position).getTime());
-        holder.floor.setText(list.get(position).getFloor());
-        holder.seat.setText(list.get(position).getSeatId());
+        Reservation reservation = list.get(position);
+        holder.date.setText(reservation.Date);
+        holder.time.setText(reservation.Time);
+        holder.floor.setText(reservation.Floor);
+        holder.seat.setText(reservation.SeatID);
     }
 
     @Override

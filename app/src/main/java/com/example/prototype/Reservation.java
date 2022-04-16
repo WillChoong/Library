@@ -2,22 +2,27 @@ package com.example.prototype;
 
 public class Reservation {
 
-    private Boolean checkIn;
-    private Boolean checkOut;
-    private String userId;
-    private String date;
-    private String time;
-    private String floor;
-    private String seatId;
+    Boolean checkIn;
+    Boolean checkOut;
+    String UserID;
+    String Date;
+    String Time;
+    String Floor;
+    String SeatID;
+
+    public Reservation()
+    {
+
+    }
 
     public Reservation(Boolean checkIn, Boolean checkOut, String userId, String date, String time, String floor, String seatId) {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.userId = userId;
-        this.date = date;
-        this.time = time;
-        this.floor = floor;
-        this.seatId = seatId;
+        this.UserID = userId;
+        this.Date = date;
+        this.Time = time;
+        this.Floor = floor;
+        this.SeatID = seatId;
     }
 
     public Boolean getCheckIn() {
@@ -36,43 +41,43 @@ public class Reservation {
         this.checkOut = checkOut;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserID() {
+        return UserID;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserID(String userID) {
+        this.UserID = userID;
     }
 
     public String getDate() {
-        return date;
+        return Date;
     }
 
     public void setDate(String date) {
-        this.date = date;
+        this.Date = date;
     }
 
     public String getTime() {
-        return time;
+        return Time;
     }
 
     public void setTime(String time) {
-        this.time = time;
+        this.Time = time;
     }
 
     public String getFloor() {
-        return floor;
+        return Floor;
     }
 
     public void setFloor(String floor) {
-        this.floor = floor;
+        this.Floor = floor;
     }
 
-    public String getSeatId() {
-        return seatId;
+    public String getSeatID() {
+        return SeatID;
     }
 
-    public void setSeatId(String seatId) {
-        this.seatId = seatId;
+    public void setSeatID(String seatID) {
+        this.SeatID = seatID;
     }
 }
