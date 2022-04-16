@@ -24,6 +24,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -413,8 +414,13 @@ public class SeatReservationActivity extends AppCompatActivity implements Naviga
         if (spinner_time.getSelectedItemPosition() > 0) {
             return true;
         } else {
-            TextView errorTextView = (TextView) spinner_time.getSelectedView();
-            errorTextView.setError("Your Error Message here");
+            if (spinner_time.getAdapter() != null && spinner_time.getAdapter().getCount() ==0) {
+                TextView errorTextView = (TextView) spinner_time.getSelectedView();
+                errorTextView.setError("Your Error Message here");
+            }else
+            {
+                Toast.makeText(this, "Please select the time !", Toast.LENGTH_SHORT).show();
+            }
             return false;
         }
     }
@@ -489,7 +495,7 @@ public class SeatReservationActivity extends AppCompatActivity implements Naviga
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            startActivity(new Intent(SeatReservationActivity.this,MainActivity.class));
+            startActivity(new Intent(SeatReservationActivity.this,HomePage.class));
         }
     }
 

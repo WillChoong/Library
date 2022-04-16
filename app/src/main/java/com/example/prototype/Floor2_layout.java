@@ -200,7 +200,7 @@ public class Floor2_layout extends AppCompatActivity {
         }
 
         // get all the reserved seat information at that date and time
-        Task<QuerySnapshot> documentReference2 = fStore.collection("reservation").whereEqualTo("Date",date).whereEqualTo("Time",time).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Task<QuerySnapshot> documentReference2 = fStore.collection("reservation").whereEqualTo("Date",date).whereEqualTo("Time",time).whereEqualTo("Check Out",false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -261,7 +261,7 @@ public class Floor2_layout extends AppCompatActivity {
                                     String[] b_split = i.getName().split("_",2);
                                     if(b_split[0].equals("seat"+spilt[0]))
                                     {
-                                        if(i.getFillColor() == Color.YELLOW)
+                                        if(i.getFillColor() == getResources().getColor(R.color.select))
                                         {
                                             // click seat and change color
                                             i.setFillColor(getResources().getColor(R.color.available));
@@ -316,10 +316,12 @@ public class Floor2_layout extends AppCompatActivity {
                                                         DocumentReference documentReference = fStore.collection("reservation").document();
                                                         Map<String, Object> reserve = new HashMap<>();
                                                         reserve.put("SeatID", spilt[0]);
+                                                        reserve.put("Floor","Floor 1");
                                                         reserve.put("UserID", userId);
                                                         reserve.put("Date", date);
                                                         reserve.put("Time", time);
-                                                        reserve.put("Floor","Floor 2");
+                                                        reserve.put("Check In",false);
+                                                        reserve.put("Check Out",false);
 
                                                         documentReference.set(reserve).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
@@ -417,7 +419,7 @@ public class Floor2_layout extends AppCompatActivity {
         {
             if(i.getName()!=null)
             {
-                if(i.getFillColor()==Color.YELLOW)
+                if(i.getFillColor()==getResources().getColor(R.color.select))
                 {
                     String[] y_name = i.getName().split("_",2);
                     if(y_name[0].equals(checkName[0]))
@@ -432,12 +434,13 @@ public class Floor2_layout extends AppCompatActivity {
             }
         }
         return false;
+
     }
 
     private Boolean checkCanReservedSeat(String id)
     {
         final String[] isReserved = {null};
-        Task<QuerySnapshot> documentReference= fStore.collection("reservation").whereEqualTo("Date",date).whereEqualTo("Time",time).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Task<QuerySnapshot> documentReference= fStore.collection("reservation").whereEqualTo("Date",date).whereEqualTo("Time",time).whereEqualTo("Floor","Floor 1").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

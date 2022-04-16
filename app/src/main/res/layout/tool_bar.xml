@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/library_background"
+    android:id="@+id/tool_bar_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -55,5 +56,22 @@
         android:id="@+id/seat_reservation_form"
         android:visibility="gone"
         layout="@layout/activity_seat_reservation_content"/>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/scan_QR"
+        android:visibility="gone"
+        layout="@layout/activity_scan_content"/>
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:id="@+id/view_reservation"
+        android:visibility="gone"
+        layout="@layout/activity_view_reservation_content"/>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
