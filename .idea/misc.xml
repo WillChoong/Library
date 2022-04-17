@@ -5,9 +5,11 @@
       <map>
         <entry key="..\:/Prototype/app/src/main/res/drawable-ldpi/floor2_asset.xml" value="1.0" />
         <entry key="..\:/Prototype/app/src/main/res/drawable-xxxhdpi/gradient_bs.xml" value="0.1455" />
+        <entry key="..\:/Prototype/app/src/main/res/drawable/custom_input.xml" value="0.129" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/gradient_bs.xml" value="0.1455" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/gradient_sc.xml" value="0.1455" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/gradient_sr.xml" value="0.1455" />
+        <entry key="..\:/Prototype/app/src/main/res/drawable/ic_baseline_menu_book_24.xml" value="0.129" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/ic_group_mail_edittext.xml" value="0.1" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/ic_icon_mail.xml" value="0.1" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/ic_icon_register.xml" value="0.1" />
@@ -15,7 +17,14 @@
         <entry key="..\:/Prototype/app/src/main/res/drawable/ic_round_edittext.xml" value="0.1" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/ic_untitled_1.xml" value="0.1455" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/ic_welcome.xml" value="0.2203125" />
+        <entry key="..\:/Prototype/app/src/main/res/drawable/nav_left.xml" value="0.129" />
+        <entry key="..\:/Prototype/app/src/main/res/drawable/nav_right.xml" value="0.129" />
+        <entry key="..\:/Prototype/app/src/main/res/drawable/nav_top.xml" value="0.129" />
+        <entry key="..\:/Prototype/app/src/main/res/drawable/nav_up.xml" value="0.129" />
+        <entry key="..\:/Prototype/app/src/main/res/drawable/tooltip_bg.xml" value="0.129" />
         <entry key="..\:/Prototype/app/src/main/res/drawable/welcome.xml" value="0.2203125" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/activity_floor1_book_full_screen.xml" value="0.190625" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/activity_floor2_book.xml" value="0.17617753623188406" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_floor2_layout.xml" value="0.1" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_home_page.xml" value="0.17617753623188406" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_homepage_content.xml" value="0.22" />
@@ -25,15 +34,26 @@
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_register.xml" value="0.2046875" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_scan.xml" value="0.1" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_scan_content.xml" value="0.17617753623188406" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/activity_search.xml" value="0.17617753623188406" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/activity_search_content.xml" value="0.3333333333333333" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_seat_reservation.xml" value="0.17617753623188406" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_seat_reservation_content.xml" value="0.14666666666666667" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_student_role.xml" value="0.20416666666666666" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_view_reservation.xml" value="0.1" />
         <entry key="..\:/Prototype/app/src/main/res/layout/activity_view_reservation_content.xml" value="0.14666666666666667" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/book_card_view.xml" value="0.17617753623188406" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/book_layout_dialog.xml" value="0.17617753623188406" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/book_layout_dialog_fullscreen.xml" value="0.17617753623188406" />
         <entry key="..\:/Prototype/app/src/main/res/layout/nav_view_header_content.xml" value="0.22" />
         <entry key="..\:/Prototype/app/src/main/res/layout/reservation_item.xml" value="0.17617753623188406" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/search_result_list.xml" value="0.17617753623188406" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/search_result_view.xml" value="0.17617753623188406" />
         <entry key="..\:/Prototype/app/src/main/res/layout/spinner_item.xml" value="0.2046875" />
         <entry key="..\:/Prototype/app/src/main/res/layout/tool_bar.xml" value="0.2046875" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/tooltip_bottom_layout.xml" value="0.17617753623188406" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/tooltip_left_layout.xml" value="0.17617753623188406" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/tooltip_right_layout.xml" value="0.17617753623188406" />
+        <entry key="..\:/Prototype/app/src/main/res/layout/tooltip_top_layout.xml" value="0.17617753623188406" />
         <entry key="..\:/Prototype/app/src/main/res/menu/nav_view_menu_content.xml" value="0.2046875" />
         <entry key="..\:/Prototype/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.20625" />
       </map>

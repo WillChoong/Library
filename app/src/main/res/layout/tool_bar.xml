@@ -71,7 +71,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="?actionBarSize"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_book"
+        android:visibility="gone"
+        android:layout_marginTop="?actionBarSize"
+        layout="@layout/activity_search_content"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -58,7 +58,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     private TextView username, student_id,tv_checkInOut;
     private String userId;
     private CardView sr, bs,cs;
-    private DocumentReference documentReferenced,documentReference;
+    private DocumentReference documentReferenced;
     private LinearLayout layout_checkInOut;
     private String date,time,t;
     private Button btn_checkInOut;

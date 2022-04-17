@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Prototype">
         <activity
+            android:name=".Floor1_book_fullScreen"
+            android:exported="false" />
+        <activity
+            android:name=".Floor1_book"
+            android:exported="false" />
+        <activity
+            android:name=".ViewReservation"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -39,7 +48,7 @@
             android:name=".HomePage"
             android:exported="false" />
         <activity
-            android:name=".ViewReservation"
+            android:name=".SearchActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
