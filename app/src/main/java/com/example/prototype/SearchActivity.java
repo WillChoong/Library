@@ -13,6 +13,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -345,20 +346,25 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         moreDetail_dialog.show();
 
         Log.d(TAG,"Path Name"+pathName);
-
         RichPathView view = moreDetail_dialog.findViewById(R.id.floor_plan);
-        RichPath path = view.findRichPathByName(pathName);
-        if(!path.isEmpty())
+        if(Integer.valueOf(txt_floor) == 1)
         {
-            path.setFillAlpha(100);
-            path.setStrokeAlpha(100);
+            view.setVectorDrawable(R.drawable.floor2_asset);
+            RichPath path = view.findRichPathByName(pathName);
+            if(!path.isEmpty())
+            {
+                path.setFillAlpha(100);
+                path.setStrokeAlpha(100);
+            }
         }
+
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SearchActivity.this,Floor1_book_fullScreen.class)
-                .putExtra());
+                        .putExtra("floor",txt_floor)
+                        .putExtra("PathName",pathName));
             }
         });
 
@@ -375,6 +381,15 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
                 (": "+txt_floor);
         tv_rak.setText
                 (": "+txt_rak);
+
+        Button okay;
+        okay = moreDetail_dialog.findViewById(R.id.btn_okay);
+        okay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                moreDetail_dialog.dismiss();
+            }
+        });
     }
 
     private String[] readJson(String filename, String callNumber)

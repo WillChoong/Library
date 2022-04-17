@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
@@ -157,32 +158,39 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                         }
                         else
                         {
-                            String id=task.getResult().getDocuments().get(0).get("UserID").toString();
-                            Boolean checkIn= (Boolean) task.getResult().getDocuments().get(0).get("Check In");
-                            Boolean checkOut= (Boolean) task.getResult().getDocuments().get(0).get("Check Out");
-                            if(id.equals(userId))
+                            if(task.getResult().getDocuments().size()==1)
                             {
-                                Log.d(TAG,"User id : "+id);
-                                Log.d(TAG,"Check in : "+checkOut);
-                                Log.d(TAG,"Check out : "+checkIn);
-                                if(checkIn==false)
+
+                            }
+                            Log.d(TAG,"Size :"+task.getResult().getDocuments().size());
+                            for(QueryDocumentSnapshot dc : task.getResult())
+                            {
+                                String id=dc.get("UserID").toString();
+                                Boolean checkIn= (Boolean) dc.get("Check In");
+                                Boolean checkOut= (Boolean) dc.get("Check Out");
+                                if(dc.get("UserID").equals(userId))
                                 {
-                                    layout_checkInOut.setVisibility(View.VISIBLE);
-                                    btn_checkInOut.setText("Check in Now");
-                                    btn_checkInOut.setTextSize(TypedValue.COMPLEX_UNIT_SP,14.0f);
-                                    countdownTimer(task.getResult().getDocuments().get(0).get("Time").toString());
-                                    btn_checkInOut.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            startActivity(new Intent(HomePage.this,ScanActivity.class));
-                                        }
-                                    });
-                                }
-                                if(checkOut==true)
-                                {
-                                    layout_checkInOut.setVisibility(View.GONE);
-                                }if(checkIn==true && checkOut==false)
-                                {
+                                    Log.d(TAG,"User id : "+id);
+                                    Log.d(TAG,"Check in : "+checkIn);
+                                    Log.d(TAG,"Check out : "+checkOut);
+                                    if(checkIn==false)
+                                    {
+                                        layout_checkInOut.setVisibility(View.VISIBLE);
+                                        btn_checkInOut.setText("Check in Now");
+                                        btn_checkInOut.setTextSize(TypedValue.COMPLEX_UNIT_SP,14.0f);
+                                        countdownTimer(task.getResult().getDocuments().get(0).get("Time").toString());
+                                        btn_checkInOut.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                startActivity(new Intent(HomePage.this,ScanActivity.class));
+                                            }
+                                        });
+                                    }
+                                    if(checkOut==true)
+                                    {
+                                        layout_checkInOut.setVisibility(View.GONE);
+                                    }if(checkIn==true && checkOut==false)
+                                    {
                                     layout_checkInOut.setVisibility(View.VISIBLE);
                                     btn_checkInOut.setText("Check out now");
                                     btn_checkInOut.setTextSize(TypedValue.COMPLEX_UNIT_SP,14.0f);
@@ -198,6 +206,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     task.getResult().getDocuments().get(0).getReference().update("Check In",true,"Check Out",true);
+                                                    layout_checkInOut.setVisibility(View.GONE);
                                                     builder.create().dismiss();
                                                 }
                                             });
@@ -211,7 +220,9 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                                         }
                                     });
                                 }
+                                }
                             }
+
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -368,6 +379,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         task.getResult().getDocuments().get(0).getReference().update("Check In",true,"Check Out",true);
+                                                        layout_checkInOut.setVisibility(View.GONE);
                                                         builder.create().dismiss();
                                                     }
                                                 });

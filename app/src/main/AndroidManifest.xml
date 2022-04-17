@@ -21,7 +21,7 @@
             android:name=".ViewReservation"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SearchActivity"
             android:exported="false" />
         <activity
             android:name=".CheckInActivity"
@@ -48,7 +48,7 @@
             android:name=".HomePage"
             android:exported="false" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

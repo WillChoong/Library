@@ -14,4 +14,5 @@
     <color name="pureBlack">#212100</color>
     <color name="available">#458b00</color>
     <color name="select">#fd5800</color>
+    <color name="gray">#808080</color>
 </resources>

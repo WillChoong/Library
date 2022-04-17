@@ -76,6 +76,7 @@ public class ScanResultActivity extends AppCompatActivity {
         content = qrcode.split(";", 3);
         floor = content[0];
         seat = content[1];
+        Log.d(TAG,"Floor"+floor+" Seat"+seat);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -105,45 +106,42 @@ public class ScanResultActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.getResult().getDocuments().isEmpty()) {
                             //Toast.makeText(ScanResultActivity.this, "No record found ", Toast.LENGTH_SHORT).show();
-
-                            Task<QuerySnapshot> documentReference = fStore.collection("reservation").whereEqualTo("Date", date).whereEqualTo("Time", t).whereEqualTo("Check Out",false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            Log.d(TAG,"No record found");
+                            Task<QuerySnapshot> documentReference = fStore.collection("reservation").whereEqualTo("UserID",userID).whereEqualTo("Date", date).whereEqualTo("Time", t).whereEqualTo("Check Out",false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Log.d(TAG,"User id is "+userID+" Date is "+date+" Time is "+t);
-                                            if(document.get("UserID").toString().equals(userID))
-                                            {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(ScanResultActivity.this);
-                                                builder.setCancelable(false);
-                                                builder.setTitle("Warning!");
-                                                String message = "You had reserved one seat no. " + document.get("SeatID") + " at " + document.get("Floor") + ".You are no longer able to take any seat at this time.";
-                                                builder.setMessage(message);
-                                                builder.setPositiveButton(
-                                                        "Okay",
-                                                        new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                builder.create().dismiss();
-                                                                startActivity(new Intent(ScanResultActivity.this,HomePage.class));
-                                                            }
+                                        if(!task.getResult().getDocuments().isEmpty())
+                                        {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(ScanResultActivity.this);
+                                            builder.setCancelable(false);
+                                            builder.setTitle("Warning!");
+                                            String message = "You had reserved one seat no. " + task.getResult().getDocuments().get(0).get("SeatID") + " at " + task.getResult().getDocuments().get(0).get("Floor") + ".You are no longer able to take any seat at this time.";
+                                            builder.setMessage(message);
+                                            builder.setPositiveButton(
+                                                    "Okay",
+                                                    new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            builder.create().dismiss();
+                                                            startActivity(new Intent(ScanResultActivity.this,HomePage.class));
                                                         }
-                                                );
-                                                AlertDialog alertDialog = builder.create();
-                                                alertDialog.show();
-                                                break;
-                                            }
-                                            else
-                                            {
-                                                DialogReserved();
-                                            }
+                                                    }
+                                            );
+                                            AlertDialog alertDialog = builder.create();
+                                            alertDialog.show();
+                                        }else
+                                        {
+                                            DialogReserved();
                                         }
                                     } else {
                                         Log.d(TAG, "Error getting documents: ", task.getException());
                                     }
                                 }
                             });
+
                         } else {
+                            Log.d(TAG,"Record found");
                             String id = task.getResult().getDocuments().get(0).get("UserID").toString();
                             String checkOut = task.getResult().getDocuments().get(0).get("Check Out").toString();
                             if (id.equals(userID)) {
@@ -195,7 +193,8 @@ public class ScanResultActivity extends AppCompatActivity {
         String seat = content[1];
         /*Toast.makeText(this, ""+seat, Toast.LENGTH_SHORT).show();*/
 
-        startActivity(new Intent(ScanResultActivity.this, CheckInActivity.class).putExtra("Floor", floor).putExtra("Seat", seat)
+        startActivity(new Intent(ScanResultActivity.this, CheckInActivity.class)
+                .putExtra("Floor", floor).putExtra("Seat", seat)
                 .putExtra("Date", d).putExtra("Slot", t));
         finish();
     }
