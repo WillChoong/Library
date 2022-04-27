@@ -35,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:vector="@drawable/floor2_asset"
+        app:vector="@drawable/floor1_asset"
         android:id="@+id/floorPlan"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

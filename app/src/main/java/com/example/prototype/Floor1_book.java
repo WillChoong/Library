@@ -48,6 +48,7 @@ public class Floor1_book extends AppCompatActivity {
         rak=bundle.getString("Rak");
         view=bundle.getString("View");
 
+
         if(view.equals("F"))
         {
             filename="FLOOR"+floor+"_RAK"+rak+"_FRONT.json";
@@ -90,6 +91,18 @@ public class Floor1_book extends AppCompatActivity {
 
 
         RichPathView view = dialog.findViewById(R.id.floor_plan);
+        /*if(Integer.valueOf(floor) ==1)
+        {
+            view.setVectorDrawable(R.drawable.floor1_asset);
+
+        }else if (Integer.valueOf(floor) ==2)
+        {
+            view.setVectorDrawable(R.drawable.floor2_asset);
+        }else if(Integer.valueOf(floor) == 3)
+        {
+            view.setVectorDrawable(R.drawable.floor3_asset);
+        }
+*/
         RichPath path = view.findRichPathByName(pathName);
         if(!path.isEmpty())
         {

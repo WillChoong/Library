@@ -38,31 +38,6 @@ public class CheckInActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
 
-        // Retrieve data from Firebase and change the textview in navigation view
-        documentReferenced=fStore.collection("users").document(userId);
-        documentReferenced.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful())
-                {
-                    DocumentSnapshot documentSnapshot= task.getResult();
-                    if(documentSnapshot.exists())
-                    {
-                        Log.d(TAG,"DocumentSnapshot data: " + documentSnapshot.getData());
-                        username = (String) documentSnapshot.get("Name");
-                    }
-                    else
-                    {
-                        Log.d(TAG, "No such document");
-                    }
-                }
-                else
-                {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-
         //get intent getExtra
         intent = getIntent();
         bundle = intent.getExtras();
@@ -80,13 +55,48 @@ public class CheckInActivity extends AppCompatActivity {
         tv_seat = findViewById(R.id.tv_seat);
 
         //set text
+        Log.d(TAG,"Username :"+username);
         tv_name.setText(username);
         tv_date.setText(date);
         tv_slot.setText(slot);
         tv_floor.setText(floor);
         tv_seat.setText(seat);
 
+        // Retrieve data from Firebase and change the textview in navigation view
+        documentReferenced=fStore.collection("users").document(userId);
+        documentReferenced.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    DocumentSnapshot documentSnapshot= task.getResult();
+                    if(documentSnapshot.exists())
+                    {
+                        Log.d(TAG,"DocumentSnapshot data: " + documentSnapshot.getData());
+                        username = (String) documentSnapshot.get("Name");
+                        tv_name.setText((String) documentSnapshot.get("Name"));
+                    }
+                    else
+                    {
+                        Log.d(TAG, "No such document");
+                    }
+                }
+                else
+                {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+
 
         // end of OnCreate
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this,HomePage.class));
     }
 }

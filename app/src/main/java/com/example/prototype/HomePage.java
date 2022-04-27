@@ -20,6 +20,7 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,11 +59,12 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     private FirebaseFirestore fStore;
     private TextView username, student_id,tv_checkInOut;
     private String userId;
-    private CardView sr, bs,cs;
+    private CardView sr, bs, vs;
     private DocumentReference documentReferenced;
     private LinearLayout layout_checkInOut;
     private String date,time,t;
     private Button btn_checkInOut;
+    private ImageView qr;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -148,7 +150,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         }
 
         Task<QuerySnapshot> dReference=fStore.collection("reservation")
-                .whereEqualTo("Date",date).whereEqualTo("Time",t)
+                .whereEqualTo("Date",date).whereEqualTo("Time",t).whereEqualTo("UserID",userId)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -166,13 +168,13 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                             for(QueryDocumentSnapshot dc : task.getResult())
                             {
                                 String id=dc.get("UserID").toString();
-                                Boolean checkIn= (Boolean) dc.get("Check In");
-                                Boolean checkOut= (Boolean) dc.get("Check Out");
+                                Boolean checkIn= (Boolean) dc.get("CheckIn");
+                                Boolean checkOut= (Boolean) dc.get("CheckOut");
                                 if(dc.get("UserID").equals(userId))
                                 {
                                     Log.d(TAG,"User id : "+id);
                                     Log.d(TAG,"Check in : "+checkIn);
-                                    Log.d(TAG,"Check out : "+checkOut);
+                                    Log.d(TAG,"Checkout : "+checkOut);
                                     if(checkIn==false)
                                     {
                                         layout_checkInOut.setVisibility(View.VISIBLE);
@@ -205,7 +207,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                                             builder.setPositiveButton("Yes",new DialogInterface.OnClickListener(){
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
-                                                    task.getResult().getDocuments().get(0).getReference().update("Check In",true,"Check Out",true);
+                                                    task.getResult().getDocuments().get(0).getReference().update("CheckIn",true,"CheckOut",true);
                                                     layout_checkInOut.setVisibility(View.GONE);
                                                     builder.create().dismiss();
                                                 }
@@ -232,10 +234,21 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                     }
                 });
 
+        //The activity allow scan QR Code ; Make the QR code function
+        qr=findViewById(R.id.image_qrcode);
+
+        qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomePage.this,ScanActivity.class));
+            }
+        });
+
+
         // get card view
         sr = findViewById(R.id.cv_sr);
         bs = findViewById(R.id.cv_bs);
-        cs = findViewById(R.id.cv_sc);
+        vs = findViewById(R.id.cv_sc);
 
         // seat reservation card view onClickListener
         sr.setOnClickListener(new View.OnClickListener() {
@@ -249,15 +262,15 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         bs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(HomePage.this,SearchActivity.class));
             }
         });
 
         // scan QR code card view onClickListener
-        cs.setOnClickListener(new View.OnClickListener() {
+        vs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomePage.this,ScanActivity.class));
+                startActivity(new Intent(HomePage.this,ViewReservation.class));
             }
         });
 
@@ -285,8 +298,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             Date d1 = h_mm_a.parse(time);
             Date systemDate = Calendar.getInstance().getTime();
             Date d2 = hh_mm_ss.parse(current_time);
-            System.out.println (d1.getTime());
-            System.out.println (d2.getTime());
             long millse = d1.getTime() - d2.getTime();
             long mills = Math.abs(millse);
             duration = mills;
@@ -339,13 +350,13 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                                 else
                                 {
                                     String id=task.getResult().getDocuments().get(0).get("UserID").toString();
-                                    Boolean checkIn= (Boolean) task.getResult().getDocuments().get(0).get("Check In");
-                                    Boolean checkOut= (Boolean) task.getResult().getDocuments().get(0).get("Check Out");
+                                    Boolean checkIn= (Boolean) task.getResult().getDocuments().get(0).get("CheckIn");
+                                    Boolean checkOut= (Boolean) task.getResult().getDocuments().get(0).get("CheckOut");
                                     if(id.equals(userId))
                                     {
                                         Log.d(TAG,"User id : "+id);
-                                        Log.d(TAG,"Check in : "+checkOut);
-                                        Log.d(TAG,"Check out : "+checkIn);
+                                        Log.d(TAG,"Check out : "+checkOut);
+                                        Log.d(TAG,"Check in : "+checkIn);
                                         if(checkIn==false)
                                         {
                                             layout_checkInOut.setVisibility(View.VISIBLE);
@@ -378,7 +389,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                                                 builder.setPositiveButton("Yes",new DialogInterface.OnClickListener(){
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        task.getResult().getDocuments().get(0).getReference().update("Check In",true,"Check Out",true);
+                                                        task.getResult().getDocuments().get(0).getReference().update("CheckIn",true,"CheckOut",true);
                                                         layout_checkInOut.setVisibility(View.GONE);
                                                         builder.create().dismiss();
                                                     }
@@ -412,7 +423,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 .whereEqualTo("Date",date).whereEqualTo("Time",t).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        task.getResult().getDocuments().get(0).getReference().update("Check Out",true);
+                        task.getResult().getDocuments().get(0).getReference().update("CheckOut",true);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -455,12 +466,16 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity(i);
                 break;
             case R.id.nav_book:
-                /*Intent g = new Intent(MainActivity.this, BookAvailability.class);
-                startActivity(g);*/
+                Intent g = new Intent(HomePage.this, SearchActivity.class);
+                startActivity(g);
+                break;
+            case R.id.nav_view:
+                Intent h = new Intent(HomePage.this, ViewReservation.class);
+                startActivity(h);
                 break;
             case R.id.logout:
-                /*Intent k=new Intent(MainActivity.this,LogoutActivity.class);
-                startActivity(k);*/
+                Intent k=new Intent(HomePage.this,LogoutActivity.class);
+                startActivity(k);
                 break;
 
         }

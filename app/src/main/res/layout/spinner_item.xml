@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:padding="10dp"
     android:textStyle="italic"
+    android:textColor="@color/black"
+    android:background="@color/white"
     android:fontFamily="sans-serif-medium">
 
 </TextView>

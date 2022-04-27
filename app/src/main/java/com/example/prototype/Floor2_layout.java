@@ -50,7 +50,7 @@ public class Floor2_layout extends AppCompatActivity {
     private RichPathView view;
     private RichPath[] all;
     private float seatW,seatH;
-    private int[] nearWindow={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178};
+    private int[] nearWindow={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194};
     private ScaleGestureDetector mScaleDetector;
     private GestureDetectorCompat mGestureDetectorCompat;
     private Float mScaleFactor = 1.0f;
@@ -88,23 +88,26 @@ public class Floor2_layout extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Floor2_layout.this);
-                        builder.setCancelable(false);
-                        builder.setTitle("Warning!");
-                        String message="You had reserved one seat no. : " + document.get("SeatID")+". You are no longer able to reserve any seat at this time.";
-                        builder.setMessage(message);
-                        builder.setPositiveButton(
-                                "Okay",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        startActivity(new Intent(Floor2_layout.this,SeatReservationActivity.class));
+                        if((Boolean) document.get("CheckOut") == false)
+                        {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Floor2_layout.this);
+                            builder.setCancelable(false);
+                            builder.setTitle("Warning!");
+                            String message="You had reserved one seat no." + document.get("SeatID")+" in "+document.get("Floor")+". You are no longer able to reserve any seat at this time.";
+                            builder.setMessage(message);
+                            builder.setPositiveButton(
+                                    "Okay",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            startActivity(new Intent(Floor2_layout.this,SeatReservationActivity.class));
+                                        }
                                     }
-                                }
-                        );
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
-                        break;
+                            );
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                            break;
+                        }
                     }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
@@ -200,13 +203,14 @@ public class Floor2_layout extends AppCompatActivity {
         }
 
         // get all the reserved seat information at that date and time
-        Task<QuerySnapshot> documentReference2 = fStore.collection("reservation").whereEqualTo("Date",date).whereEqualTo("Time",time).whereEqualTo("Check Out",false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Task<QuerySnapshot> documentReference2 = fStore.collection("reservation").whereEqualTo("Date",date).whereEqualTo("Time",time).whereEqualTo("Floor","Floor 2").whereEqualTo("CheckOut",false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String id = (String) document.get("SeatID");
                         Log.d(TAG, "ID : "+id);
+                        Log.d(TAG,"Document id:"+document.getId());
                         for (RichPath i : all)
                         {
                             if(i.getName()!=null && i.getName().contains("seat"+id))
@@ -269,7 +273,7 @@ public class Floor2_layout extends AppCompatActivity {
                                             msg = findViewById(R.id.bottom_msg);
                                             msg.setVisibility(View.GONE);
                                         }
-                                        else
+                                        else if(i.getFillColor() == getResources().getColor(R.color.available))
                                         {
                                             // click seat and change color
                                             i.setFillColor(getResources().getColor(R.color.select));
@@ -288,78 +292,96 @@ public class Floor2_layout extends AppCompatActivity {
                                                     pb = findViewById(R.id.progressbar);
                                                     pb.setVisibility(View.VISIBLE);
 
-                                                    Boolean checkCanReserved = checkCanReservedSeat(spilt[0]);
-                                                    //Boolean checkCanReserved = false;
-                                                    Log.d(TAG,"Spilt[0] is "+spilt[0]);
-                                                    if(checkCanReserved == true)
-                                                    {
-                                                        AlertDialog.Builder builder = new AlertDialog.Builder(Floor2_layout.this);
-                                                        builder.setCancelable(false);
 
-                                                        builder.setTitle("Failed");
-                                                        String message="Someone had reserved the seat";
-                                                        builder.setMessage(message);
-                                                        builder.setPositiveButton(
-                                                                "Okay",
-                                                                new DialogInterface.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                        startActivity(new Intent(Floor2_layout.this,HomePage.class));
-                                                                    }
-                                                                }
-                                                        );
-                                                        AlertDialog alertDialog = builder.create();
-                                                        alertDialog.show();
-                                                        pb.setVisibility(View.GONE);
-                                                    }else
-                                                    {
-                                                        DocumentReference documentReference = fStore.collection("reservation").document();
-                                                        Map<String, Object> reserve = new HashMap<>();
-                                                        reserve.put("SeatID", spilt[0]);
-                                                        reserve.put("Floor","Floor 1");
-                                                        reserve.put("UserID", userId);
-                                                        reserve.put("Date", date);
-                                                        reserve.put("Time", time);
-                                                        reserve.put("Check In",false);
-                                                        reserve.put("Check Out",false);
+                                                    Task<QuerySnapshot> checkAgain= fStore.collection("reservation").whereEqualTo("Date",date)
+                                                            .whereEqualTo("Time",time).whereEqualTo("SeatID",spilt[0])
+                                                            .whereEqualTo("CheckOut",false).whereEqualTo("Floor","Floor 2").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        if(! task.getResult().isEmpty() && task.getResult().getDocuments().get(0).get("SeatID").toString().equals(spilt[0]))
+                                                                        {
+                                                                            AlertDialog.Builder builder = new AlertDialog.Builder(Floor2_layout.this);
+                                                                            builder.setCancelable(false);
 
-                                                        documentReference.set(reserve).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-                                                                Log.d(TAG, "OnSuccess : reservation is created by " + userId);
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(Floor2_layout.this);
-                                                                builder.setCancelable(false);
-
-                                                                builder.setTitle("Successfully");
-                                                                String message="You had reserved a seat No."+spilt[0];
-                                                                builder.setMessage(message);
-                                                                builder.setPositiveButton(
-                                                                        "Okay",
-                                                                        new DialogInterface.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                                startActivity(new Intent(Floor2_layout.this,HomePage.class));
+                                                                            builder.setTitle("Failed");
+                                                                            String message="Someone had reserved the seat";
+                                                                            builder.setMessage(message);
+                                                                            builder.setPositiveButton(
+                                                                                    "Okay",
+                                                                                    new DialogInterface.OnClickListener() {
+                                                                                        @Override
+                                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                                            builder.create().dismiss();
+                                                                                        }
+                                                                                    }
+                                                                            );
+                                                                            AlertDialog alertDialog = builder.create();
+                                                                            alertDialog.show();
+                                                                            //change color to red
+                                                                            String sub = richPath.getName().substring(4);
+                                                                            String[] spilt = sub.split("_",2);
+                                                                            Log.d(TAG,"Click Name :"+i.getName());
+                                                                            for(RichPath i : all) {
+                                                                                if (i.getName() != null && i.getFillColor()==getResources().getColor(R.color.select)) {
+                                                                                    i.setFillColor(Color.RED);
+                                                                                }
                                                                             }
+                                                                            pb.setVisibility(View.GONE);
+                                                                            msg.setVisibility(View.GONE);
                                                                         }
-                                                                );
-                                                                AlertDialog alertDialog = builder.create();
-                                                                alertDialog.show();
-                                                                pb.setVisibility(View.GONE);
-                                                            }
-                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Log.d(TAG, "OnFailure : " + e.toString());
-                                                                Toast.makeText(Floor2_layout.this, "Failed," + e.toString(), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-                                                    }
+                                                                        else
+                                                                        {
+                                                                            Log.d(TAG,"uploading.....");
+                                                                            DocumentReference documentReference = fStore.collection("reservation").document();
+                                                                            Map<String, Object> reserve = new HashMap<>();
+                                                                            reserve.put("SeatID", spilt[0]);
+                                                                            reserve.put("Floor","Floor 2");
+                                                                            reserve.put("UserID", userId);
+                                                                            reserve.put("Date", date);
+                                                                            reserve.put("Time", time);
+                                                                            reserve.put("CheckIn",false);
+                                                                            reserve.put("CheckOut",false);
+                                                                            documentReference.set(reserve).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                @Override
+                                                                                public void onSuccess(Void aVoid) {
+                                                                                    Log.d(TAG, "OnSuccess : reservation is created by " + userId);
+                                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(Floor2_layout.this);
+                                                                                    builder.setCancelable(false);
 
+                                                                                    builder.setTitle("Successfully");
+                                                                                    String message="You had reserved a seat No."+spilt[0];
+                                                                                    builder.setMessage(message);
+                                                                                    builder.setPositiveButton(
+                                                                                            "Okay",
+                                                                                            new DialogInterface.OnClickListener() {
+                                                                                                @Override
+                                                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                                                    startActivity(new Intent(Floor2_layout.this,HomePage.class));
+                                                                                                }
+                                                                                            }
+                                                                                    );
+                                                                                    AlertDialog alertDialog = builder.create();
+                                                                                    alertDialog.show();
+                                                                                    pb.setVisibility(View.GONE);
+                                                                                }
+                                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception e) {
+                                                                                    Log.d(TAG, "OnFailure : " + e.toString());
+                                                                                    Toast.makeText(Floor2_layout.this, "Failed," + e.toString(), Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            });
+                                                                        }
 
+                                                                    } else {
+                                                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                                                    }
+                                                        }
+                                                    });
                                                 }
                                             });
                                         }
-
                                     }
                                 }
                             }

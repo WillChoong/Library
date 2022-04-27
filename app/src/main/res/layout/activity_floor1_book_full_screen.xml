@@ -10,7 +10,7 @@
     <com.richpath.RichPathView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:vector="@drawable/floor2_asset"
+        app:vector="@drawable/floor1_asset"
         android:id="@+id/floorPlan"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

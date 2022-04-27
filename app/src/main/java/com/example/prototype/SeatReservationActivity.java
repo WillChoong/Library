@@ -9,8 +9,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -133,7 +135,7 @@ public class SeatReservationActivity extends AppCompatActivity implements Naviga
 
         //Setup  spinner to select floor level
         spinner_level = findViewById(R.id.floor_level);
-        final String[] floor_level = new String[]{"Upper ground", "First floor","Second floor","Third Floor"};
+        final String[] floor_level = new String[]{"Upper ground", "First floor","Second floor","Third floor"};
         final List<String> floor = new ArrayList<>(Arrays.asList(floor_level));
         final ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, floor) {
             @Override
@@ -329,11 +331,12 @@ public class SeatReservationActivity extends AppCompatActivity implements Naviga
     public void setSpinner(List<String> time, int time_position) {
         final Spinner start_timeText = findViewById(R.id.start_time);
 
-        final ArrayAdapter<String> stringArrayAdapter_time = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, time) {
+        final ArrayAdapter<String> stringArrayAdapter_time = new ArrayAdapter<String>(this, R.layout.spinner_item_time, time) {
             @Override
             public boolean isEnabled(int position) {
                 return position > time_position;
             }
+
 
             @Override
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -349,7 +352,8 @@ public class SeatReservationActivity extends AppCompatActivity implements Naviga
                 return view;
             }
         };
-        stringArrayAdapter_time.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        stringArrayAdapter_time.setDropDownViewResource(R.layout.spinner_item_time);
         start_timeText.setAdapter(stringArrayAdapter_time);
 
     }
@@ -458,20 +462,28 @@ public class SeatReservationActivity extends AppCompatActivity implements Naviga
                 selectNearWindow = true;
             }
 
-            Intent floor1 = new Intent(SeatReservationActivity.this, Floor2_layout.class);
-            Intent floor2 = new Intent(SeatReservationActivity.this, HomePage.class);
+            Intent floor1 = new Intent(SeatReservationActivity.this, Floor1_layout.class);
+            Intent floor2 = new Intent(SeatReservationActivity.this, Floor2_layout.class);
+            Intent floor3 = new Intent(SeatReservationActivity.this, Floor3_layout.class);
+            Intent upperGround = new Intent(SeatReservationActivity.this, UpperGround_layout.class);
 
             if (selectPcAccess == true) {
+                floor3.putExtra("Criteria_PcAccess", true);
                 floor2.putExtra("Criteria_PcAccess", true);
                 floor1.putExtra("Criteria_PcAccess", true);
+                upperGround.putExtra("Criteria_PcAccess", true);
             }
             if (selectPowerSocket == true) {
+                floor3.putExtra("Criteria_PowerSocket", true);
                 floor2.putExtra("Criteria_PowerSocket", true);
                 floor1.putExtra("Criteria_PowerSocket", true);
+                upperGround.putExtra("Criteria_PowerSocket", true);
             }
             if (selectNearWindow == true) {
+                floor3.putExtra("Criteria_NearWindow", true);
                 floor2.putExtra("Criteria_NearWindow", true);
                 floor1.putExtra("Criteria_NearWindow", true);
+                upperGround.putExtra("Criteria_PowerSocket", true);
             }
 
             // Still need add things
@@ -479,10 +491,21 @@ public class SeatReservationActivity extends AppCompatActivity implements Naviga
                 floor1.putExtra("Date", dateText);
                 floor1.putExtra("Time", time);
                 startActivity(floor1);
-            } else {
+            } else if(floor_level == "Second floor"){
                 floor2.putExtra("Date", dateText);
                 floor2.putExtra("Time", time);
                 startActivity(floor2);
+            }
+            else if(floor_level == "Third floor"){
+                floor3.putExtra("Date", dateText);
+                floor3.putExtra("Time", time);
+                startActivity(floor3);
+            }
+            else if(floor_level == "Upper ground")
+            {
+                upperGround.putExtra("Date", dateText);
+                upperGround.putExtra("Time", time);
+                startActivity(upperGround);
             }
         }
     }
@@ -514,14 +537,22 @@ public class SeatReservationActivity extends AppCompatActivity implements Naviga
         switch (id) {
 
             case R.id.nav_home:
-                Intent h = new Intent(SeatReservationActivity.this, HomePage.class);
-                startActivity(h);
+                Intent i = new Intent(SeatReservationActivity.this, HomePage.class);
+                startActivity(i);
                 break;
             case R.id.nav_seat:
                 break;
             case R.id.nav_book:
-                //Intent g = new Intent(SeatReservationActivity.this, BookAvailability.class);
-                //startActivity(g);
+                Intent g = new Intent(SeatReservationActivity.this, SearchActivity.class);
+                startActivity(g);
+                break;
+            case R.id.nav_view:
+                Intent h = new Intent(SeatReservationActivity.this, ViewReservation.class);
+                startActivity(h);
+                break;
+            case R.id.logout:
+                Intent k=new Intent(SeatReservationActivity.this,LogoutActivity.class);
+                startActivity(k);
                 break;
 
         }

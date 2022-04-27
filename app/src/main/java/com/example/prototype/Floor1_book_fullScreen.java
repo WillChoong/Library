@@ -45,7 +45,25 @@ public class Floor1_book_fullScreen extends AppCompatActivity {
 
         if(Integer.valueOf(floor) == 1)
         {
+            view.setVectorDrawable(R.drawable.floor1_asset);
+            RichPath path = view.findRichPathByName(pathName);
+            if(!path.isEmpty())
+            {
+                path.setFillAlpha(100);
+                path.setStrokeAlpha(100);
+            }
+        }else if(Integer.valueOf(floor) == 2)
+        {
             view.setVectorDrawable(R.drawable.floor2_asset);
+            RichPath path = view.findRichPathByName(pathName);
+            if(!path.isEmpty())
+            {
+                path.setFillAlpha(100);
+                path.setStrokeAlpha(100);
+            }
+        }else if(Integer.valueOf(floor) == 3)
+        {
+            view.setVectorDrawable(R.drawable.floor3_asset);
             RichPath path = view.findRichPathByName(pathName);
             if(!path.isEmpty())
             {

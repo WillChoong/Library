@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="5dp"
+    android:id="@+id/layout_cardView"
     app:cardElevation="5dp">
 
         <LinearLayout

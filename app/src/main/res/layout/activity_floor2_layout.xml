@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Floor2_layout">
+    tools:context=".Floor2_layout"
+    android:background="@color/white">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
                 android:layout_height="?actionBarSize"
                 android:background="@color/light_blue"
                 app:popupTheme="@style/Theme.Prototype.PopupOverlay"
-                app:title="Floor 2" />
+                app:title="Second Floor" />
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -60,15 +61,15 @@
             android:text="You have selected a seat.\nDo you wish to reserve the seat now?"
             android:textColor="@color/pureBlack"
             android:layout_gravity="center"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="OK"
-                android:id="@+id/confimReserved"
-                android:backgroundTint="@color/yellow"
-                android:layout_gravity="center"
-                android:textColor="@color/black"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="OK"
+            android:id="@+id/confimReserved"
+            android:backgroundTint="@color/yellow"
+            android:layout_gravity="center"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
@@ -81,6 +82,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="gone"
         android:id="@+id/progressbar"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

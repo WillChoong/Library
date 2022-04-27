@@ -45,7 +45,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition();
+            int position = getBindingAdapterPosition();
             mOnClickListener.onListItemClick(position);
         }
     }

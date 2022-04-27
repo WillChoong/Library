@@ -107,7 +107,7 @@ public class ScanResultActivity extends AppCompatActivity {
                         if (task.getResult().getDocuments().isEmpty()) {
                             //Toast.makeText(ScanResultActivity.this, "No record found ", Toast.LENGTH_SHORT).show();
                             Log.d(TAG,"No record found");
-                            Task<QuerySnapshot> documentReference = fStore.collection("reservation").whereEqualTo("UserID",userID).whereEqualTo("Date", date).whereEqualTo("Time", t).whereEqualTo("Check Out",false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            Task<QuerySnapshot> documentReference = fStore.collection("reservation").whereEqualTo("UserID",userID).whereEqualTo("Date", date).whereEqualTo("Time", t).whereEqualTo("CheckOut",false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {
@@ -143,10 +143,10 @@ public class ScanResultActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG,"Record found");
                             String id = task.getResult().getDocuments().get(0).get("UserID").toString();
-                            String checkOut = task.getResult().getDocuments().get(0).get("Check Out").toString();
+                            String checkOut = task.getResult().getDocuments().get(0).get("CheckOut").toString();
                             if (id.equals(userID)) {
                                 //Toast.makeText(ScanResultActivity.this, "Check In"+checkOut, Toast.LENGTH_SHORT).show();
-                                task.getResult().getDocuments().get(0).getReference().update("Check In", true, "Check Out", false);
+                                task.getResult().getDocuments().get(0).getReference().update("CheckIn", true, "CheckOut", false);
                                 CheckInSuccess();
                             } else if (id != userID) {
                                 //Toast.makeText(ScanResultActivity.this, "Someone reserved the seat", Toast.LENGTH_SHORT).show();
@@ -209,13 +209,13 @@ public class ScanResultActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         DocumentReference dr = fStore.collection("reservation").document();
                         Map<String, Object> rs = new HashMap<>();
-                        rs.put("SeatID", content[1]);
-                        rs.put("Floor", content[0]);
-                        rs.put("UserID", userID);
-                        rs.put("Date", date);
-                        rs.put("Time", t);
-                        rs.put("Check In", true);
-                        rs.put("Check Out", false);
+                        rs.put("SeatID",content[1]);
+                        rs.put("Floor",content[0]);
+                        rs.put("UserID",userID);
+                        rs.put("Date",date);
+                        rs.put("Time",t);
+                        rs.put("CheckIn",true);
+                        rs.put("CheckOut",false);
                         dr.set(rs).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {

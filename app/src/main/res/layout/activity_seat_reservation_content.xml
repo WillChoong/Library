@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.prototype.SeatReservationActivity"
-    tools:showIn="@layout/tool_bar">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +19,8 @@
             android:layout_height="wrap_content"
             android:text="Find a seat"
             android:layout_gravity="center"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="15dp"
+            android:textColor="@color/gray"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -31,16 +31,18 @@
             android:background="@color/white"
             android:gravity="center_horizontal"
             app:errorEnabled="true"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="15dp"
+            android:textColorHint="@color/gray"
+            android:textColor="@color/black"/>
 
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-
             android:id="@+id/start_time"
             android:spinnerMode="dialog"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/white"/>
 
 
 
@@ -48,14 +50,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Select Floor Level"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="15dp"
+            android:textColor="@color/gray"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:id="@+id/floor_level"
             android:spinnerMode="dropdown"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/white"/>
 
 
         <TextView
@@ -64,7 +68,8 @@
             android:text="Seat types"
             android:textAlignment="center"
             android:gravity="center_horizontal"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/gray"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,7 +83,8 @@
                 android:layout_gravity="left"
                 android:id="@+id/checkbox_NoPreference"
                 android:onClick="checkbox_validating"
-                android:checked="true"/>
+                android:checked="true"
+                android:textColor="@color/black"/>
             <CheckBox
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -86,7 +92,8 @@
                 android:text="PC access"
                 android:layout_gravity="right"
                 android:id="@+id/checkbox_PCAccess"
-                android:onClick="checkbox_validate"/>
+                android:onClick="checkbox_validate"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
         <LinearLayout
@@ -100,7 +107,8 @@
                 android:text="Power Socket"
                 android:layout_gravity="left"
                 android:id="@+id/checkbox_PowerSocket"
-                android:onClick="checkbox_validate"/>
+                android:onClick="checkbox_validate"
+                android:textColor="@color/black"/>
             <CheckBox
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -108,7 +116,8 @@
                 android:text="Near Window"
                 android:layout_gravity="right"
                 android:id="@+id/checkbox_NearWindow"
-                android:onClick="checkbox_validate"/>
+                android:onClick="checkbox_validate"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
         <Button

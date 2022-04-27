@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,8 +26,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,26 +47,28 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,BookAdapter.ListItemClickListener{
+public class SearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,BookAdapter.ListItemClickListener {
 
-    private static final String TAG ="SearchPage" ;
+    private static final String TAG = "SearchPage";
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private Toolbar toolbar=null;
-    private View content,header;
+    private Toolbar toolbar = null;
+    private View content, header;
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
     private TextView username, student_id;
-    private String userId,direction,pathName;
+    private String userId, direction, pathName;
     private DocumentReference documentReferenced;
     private ImageView qr;
     private EditText tv_Search;
     private Button btn_Search;
-    private List<BookData> bookDataList=new ArrayList<>();
+    private List<BookData> bookDataList = new ArrayList<>();
     private RecyclerView recyclerView;
     private BookAdapter bookAdapter;
-    private  String[] bookDetails=new String[2];
+    private String[] bookDetails = new String[2];
     private Dialog moreDetail_dialog;
+    private LinearLayout notFound;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         content.setVisibility(View.VISIBLE);
 
         //The activity does not allow scan QR Code ; Make the QR code gone
-        qr=findViewById(R.id.image_qrcode);
+        qr = findViewById(R.id.image_qrcode);
         qr.setVisibility(View.GONE);
 
         //Change toolbar title
@@ -95,37 +97,31 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         //Declare navigation view and set listener
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        header=navigationView.getHeaderView(0);
-        username=header.findViewById(R.id.username);
-        student_id=header.findViewById(R.id.student_id);
+        header = navigationView.getHeaderView(0);
+        username = header.findViewById(R.id.username);
+        student_id = header.findViewById(R.id.student_id);
 
         // Declare firebaseAuth and firebaseFireStore
-        fAuth=FirebaseAuth.getInstance();
+        fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
 
         // Retrieve data from Firebase and change the textview in navigation view
-        documentReferenced=fStore.collection("users").document(userId);
+        documentReferenced = fStore.collection("users").document(userId);
         documentReferenced.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful())
-                {
-                    DocumentSnapshot documentSnapshot= task.getResult();
-                    if(documentSnapshot.exists())
-                    {
-                        Log.d(TAG,"DocumentSnapshot data: " + documentSnapshot.getData());
-                        username.setText("Name : "+ documentSnapshot.get("Name"));
-                        student_id.setText("Student ID : "+documentSnapshot.get("Student_ID"));
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + documentSnapshot.getData());
+                        username.setText("Name : " + documentSnapshot.get("Name"));
+                        student_id.setText("Student ID : " + documentSnapshot.get("Student_ID"));
 
-                    }
-                    else
-                    {
+                    } else {
                         Log.d(TAG, "No such document");
                     }
-                }
-                else
-                {
+                } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
@@ -133,21 +129,27 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
 
         tv_Search = findViewById(R.id.tv_searchBook);
         btn_Search = findViewById(R.id.btn_searchBook);
-
+        notFound = findViewById(R.id.layout_notFound);
 
         tv_Search.setOnEditorActionListener(editorActionListener);
 
         btn_Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog = new ProgressDialog(SearchActivity.this);
+                progressDialog.setCancelable(false);
+                progressDialog.setMessage("Fetching data");
+                progressDialog.show();
                 tv_Search.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        notFound.setVisibility(View.GONE);
                         bookAdapter.getFilter().filter(charSequence);
                     }
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        notFound.setVisibility(View.GONE);
                         bookAdapter.getFilter().filter(charSequence);
                     }
 
@@ -162,20 +164,35 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         //end of OnCreate
     }
 
+
+    private void showFetching()
+    {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Fetching data");
+        //progressDialog.show();
+    }
+
     private TextView.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
             switch (i)
             {
                 case EditorInfo.IME_ACTION_SEARCH:
+                    progressDialog = new ProgressDialog(SearchActivity.this);
+                    progressDialog.setCancelable(false);
+                    progressDialog.setMessage("Fetching data");
+                    progressDialog.show();
                     tv_Search.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            notFound.setVisibility(View.GONE);
                             bookAdapter.getFilter().filter(charSequence);
                         }
 
                         @Override
                         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            notFound.setVisibility(View.GONE);
                             bookAdapter.getFilter().filter(charSequence);
                         }
 
@@ -195,7 +212,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         int k=0;
         String prev_BookName=null;
         try{
-            InputStream is=getAssets().open("BookData.json");
+            InputStream is=getAssets().open("Book Data.json");
             int size=is.available();
             byte[] buffer=new byte[size];
             is.read(buffer);
@@ -228,10 +245,22 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
             }
             //Log.d(TAG,"Search :"+bookDataList.get(2).BookName.toString());
             recyclerView=(RecyclerView) findViewById(R.id.searchResultView);
+            if(bookDataList.isEmpty())
+            {
+                notFound.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            }else
+            {
+                notFound.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
             bookAdapter=new BookAdapter(bookDataList, this);
             recyclerView.setAdapter(bookAdapter);
+            if(progressDialog.isShowing())
+                progressDialog.dismiss();
+
         }catch(Exception e)
         {
             Log.e(TAG,e.toString());
@@ -246,8 +275,8 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            finishAffinity();
-            //super.onBackPressed();
+            //finishAffinity();
+            startActivity(new Intent(SearchActivity.this,HomePage.class));
         }
     }
 
@@ -266,18 +295,22 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         switch (id) {
 
             case R.id.nav_home:
+                Intent g = new Intent(SearchActivity.this, HomePage.class);
+                startActivity(g);
                 break;
             case R.id.nav_seat:
                 Intent i = new Intent(SearchActivity.this, SeatReservationActivity.class);
                 startActivity(i);
                 break;
             case R.id.nav_book:
-                /*Intent g = new Intent(MainActivity.this, BookAvailability.class);
-                startActivity(g);*/
+                break;
+            case R.id.nav_view:
+                Intent h = new Intent(SearchActivity.this, ViewReservation.class);
+                startActivity(h);
                 break;
             case R.id.logout:
-                /*Intent k=new Intent(MainActivity.this,LogoutActivity.class);
-                startActivity(k);*/
+                Intent k=new Intent(SearchActivity.this,LogoutActivity.class);
+                startActivity(k);
                 break;
 
         }
@@ -349,7 +382,25 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         RichPathView view = moreDetail_dialog.findViewById(R.id.floor_plan);
         if(Integer.valueOf(txt_floor) == 1)
         {
+            view.setVectorDrawable(R.drawable.floor1_asset);
+            RichPath path = view.findRichPathByName(pathName);
+            if(!path.isEmpty())
+            {
+                path.setFillAlpha(100);
+                path.setStrokeAlpha(100);
+            }
+        }else if(Integer.valueOf(txt_floor) == 2)
+        {
             view.setVectorDrawable(R.drawable.floor2_asset);
+            RichPath path = view.findRichPathByName(pathName);
+            if(!path.isEmpty())
+            {
+                path.setFillAlpha(100);
+                path.setStrokeAlpha(100);
+            }
+        }else if(Integer.valueOf(txt_floor) == 3)
+        {
+            view.setVectorDrawable(R.drawable.floor3_asset);
             RichPath path = view.findRichPathByName(pathName);
             if(!path.isEmpty())
             {
